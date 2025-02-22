@@ -1,5 +1,6 @@
 *
 !/.git*
+!/README.md
 !/flake.nix
 !/makefile
 !/mpv-rtkit.c
