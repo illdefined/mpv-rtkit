@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: EUPL-1.2-or-later
+
 #include <assert.h>
 #include <ctype.h>
 #include <errno.h>
