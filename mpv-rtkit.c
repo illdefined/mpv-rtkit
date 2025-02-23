@@ -93,10 +93,10 @@ extern long syscall(long, ...);
 [[gnu::weak, nodiscard, gnu::const]]
 unsigned long int mpv_client_api_version();
 
-[[gnu::weak, gnu::pure, gnu::returns_nonnull, gnu::nonnull(1)]]
+[[gnu::weak, nodiscard, gnu::pure, gnu::returns_nonnull, gnu::nonnull(1)]]
 char const *mpv_client_name(struct mpv_handle *restrict);
 
-[[gnu::weak, gnu::returns_nonnull, gnu::nonnull(1)]]
+[[gnu::weak, nodiscard, gnu::returns_nonnull, gnu::nonnull(1)]]
 struct mpv_event *mpv_wait_event(struct mpv_handle *restrict, double);
 
 [[nodiscard, gnu::const]]
