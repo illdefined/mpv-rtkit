@@ -1,6 +1,10 @@
-*
-!/.git*
-!/README.md
-!/flake.nix
-!/makefile
-!/mpv-rtkit.c
+# hidden files
+.*
+!.git*
+
+# Nix
+flake.lock
+/result
+/result-*
+
+*.so
