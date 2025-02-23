@@ -360,9 +360,9 @@ static bool elevate_threads(struct Context *restrict context, uint_least32_t max
 	DIR *dir;
 
 	{
-		int fd = dup(context->proc);
+		int fd = fcntl(context->proc, F_DUPFD_CLOEXEC);
 		if (unlikely(fd < 0)) {
-			mesg(context, LOG_ERR, "dup(%i): %m", fd);
+			mesg(context, LOG_ERR, "fcntl(%i, F_DUPFD_CLOEXEC): %m", fd);
 			goto exit;
 		}
 
