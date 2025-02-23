@@ -90,6 +90,9 @@ static char const task_path[] = "/proc/self/task";
 extern long syscall(long, ...);
 
 // Weak symbols for libmpv functions to avoid linking errors
+[[gnu::weak, nodiscard, gnu::const]]
+unsigned long int mpv_client_api_version();
+
 [[gnu::weak, gnu::pure, gnu::returns_nonnull, gnu::nonnull(1)]]
 char const *mpv_client_name(struct mpv_handle *restrict);
 
@@ -532,12 +535,42 @@ static void context_destroy(struct Context *restrict context) {
 	/* memset(context, 0, sizeof *context); */
 }
 
+[[nodiscard, gnu::const]]
+uint_least16_t major(uint_least32_t version) {
+	return (uint_least16_t) (version >> 16);
+}
+
+[[nodiscard, gnu::const]]
+uint_least16_t minor(uint_least32_t version) {
+	return (uint_least16_t) (version & ((1 << 16) - 1));
+}
+
 [[gnu::visibility("default"), gnu::nonnull(1)]]
 int mpv_open_cplugin(struct mpv_handle *restrict mpv) {
 	struct Context context;
 
 	if (unlikely(!context_init(&context, mpv))) {
 		goto failure;
+	}
+
+	if (major(MPV_CLIENT_API_VERSION) != major(mpv_client_api_version())) {
+		mesg(&context, LOG_CRIT, "Incompatible mpv client API versions: "
+			"Built with version %" PRIuLEAST16 ".%" PRIuLEAST16 ", "
+			"but run with version %" PRIuLEAST16 ".%" PRIuLEAST16,
+			major(MPV_CLIENT_API_VERSION), minor(MPV_CLIENT_API_VERSION),
+			major(mpv_client_api_version()), minor(mpv_client_api_version()));
+		goto destroy;
+	} else if (minor(MPV_CLIENT_API_VERSION) > minor(mpv_client_api_version())) {
+		mesg(&context, LOG_WARN, "Potentially incompatible mpv client API versions: "
+			"Built with version %" PRIuLEAST16 ".%" PRIuLEAST16 ", "
+			"but run with version %" PRIuLEAST16 ".%" PRIuLEAST16,
+			major(MPV_CLIENT_API_VERSION), minor(MPV_CLIENT_API_VERSION),
+			major(mpv_client_api_version()), minor(mpv_client_api_version()));
+	} else {
+		mesg(&context, LOG_DEBUG, "mpv client API version %" PRIuLEAST16 ".%" PRIuLEAST16 " "
+		  "(built with %" PRIuLEAST16 ".%" PRIuLEAST16 ")",
+			major(MPV_CLIENT_API_VERSION), minor(MPV_CLIENT_API_VERSION),
+			major(mpv_client_api_version()), minor(mpv_client_api_version()));
 	}
 
 	{
