@@ -11,7 +11,7 @@ LDFLAGS += -shared -Wl,--no-undefined -Wl,--no-allow-shlib-undefined -Wl,--as-ne
 CFLAGS_PKGS != pkg-config --cflags mpv dbus-1
 LIBS != pkg-config --libs dbus-1
 
-self := mpv-rtkit
+self := rtkit
 ext := .so
 obj := $(self)$(ext)
 
