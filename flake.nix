@@ -28,6 +28,16 @@
 
         installFlags = [ "PREFIX=${placeholder "out"}" ];
         stripDebugList = [ "share/mpv/scripts" ];
+
+        passthru.scriptName = "rtkit.so";
+
+        meta = {
+          description = "RealtimeKit plugin for mpv";
+          homepage = "https://woof.rip/mikael/mpv-rtkit";
+          license = lib.licenses.eupl12;
+          platforms = lib.platforms.linux;
+          maintainers = with lib.maintainers; [ mvs ];
+        };
       }) { };
     });
 
