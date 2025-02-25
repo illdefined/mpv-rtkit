@@ -9,7 +9,7 @@
         lib,
         stdenv,
         pkg-config,
-        mpv,
+        mpv-unwrapped,
         dbus,
         rtkit,
       }:
@@ -24,7 +24,7 @@
 
         strictDeps = true;
         nativeBuildInputs = [ pkg-config ];
-        buildInputs = [ mpv dbus ];
+        buildInputs = [ mpv-unwrapped dbus ];
 
         installFlags = [ "PREFIX=${placeholder "out"}" ];
       }) { };
