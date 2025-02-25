@@ -27,6 +27,7 @@
         buildInputs = [ mpv-unwrapped dbus ];
 
         installFlags = [ "PREFIX=${placeholder "out"}" ];
+        stripDebugList = [ "share/mpv/scripts" ];
       }) { };
     });
 
