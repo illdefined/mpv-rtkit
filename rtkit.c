@@ -424,7 +424,7 @@ static bool elevate_threads(struct Context *restrict context, uint_least32_t max
 			prio = max;
 		} else if (cmp(comm, "vo", rlen)) {
 			prio = sub(max, 1);
-		} else if (pre(comm, "av:", rlen)) {
+		} else if (cmp(comm, "demux", rlen) || pre(comm, "av:", rlen)) {
 			prio = sub(max, 2);
 		} else {
 			mesg(context, LOG_DEBUG, "Skipping unknown task %.*s (%i)", (int) rlen, comm, thread);
