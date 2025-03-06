@@ -324,13 +324,13 @@ static bool pre(char const *restrict mem, char const *restrict str, size_t len) 
 
 // Saturating subtraction
 [[nodiscard, gnu::const]]
-static uint32_t sub(uint32_t min, uint32_t sub) {
+static uint_least8_t sub(uint_least8_t min, uint_least8_t sub) {
 #if __has_builtin(__builtin_sub_overflow)
-	uint32_t diff;
+	uint_least8_t diff;
 	return __builtin_sub_overflow(min, sub, &diff) ? 0 : diff;
 #else
-	int64_t diff = (int64_t) min - (int64_t sub);
-	return diff >= 0 ? (uint32_t) diff : 0;
+	int_least16_t diff = (int_least16_t) min - (int_least16_t) sub;
+	return diff >= 0 ? (uint_least8_t) diff : 0;
 #endif
 }
 
@@ -355,7 +355,7 @@ static char const *sched_name(int policy) {
 }
 
 [[gnu::nonnull(1)]]
-static bool elevate_threads(struct Context *restrict context, uint_least32_t max) {
+static bool elevate_threads(struct Context *restrict context, uint_least8_t max) {
 	bool status = false;
 	DIR *dir;
 
@@ -418,7 +418,7 @@ static bool elevate_threads(struct Context *restrict context, uint_least32_t max
 			goto loop;
 		}
 
-		uint_least32_t prio;
+		uint_least8_t prio;
 
 		if (cmp(comm, "mpv/ao/pipewire", rlen) || pre(comm, "data-loop.", rlen)) {
 			prio = max;
@@ -447,10 +447,10 @@ static bool elevate_threads(struct Context *restrict context, uint_least32_t max
 			}
 		}
 
-		mesg(context, LOG_INFO, "Elevating task %.*s (%i) to real‐time priority %" PRIu32, (int) rlen, comm, thread, prio);
+		mesg(context, LOG_INFO, "Elevating task %.*s (%i) to real‐time priority %" PRIu8, (int) rlen, comm, thread, prio);
 
 		if (unlikely(!rtkit_make_realtime(context, thread, prio))) {
-			mesg(context, LOG_ERR, "Failed to elevate task %.*s (%i) to real‐time priority %" PRIu32, (int) rlen, comm, thread, prio);
+			mesg(context, LOG_ERR, "Failed to elevate task %.*s (%i) to real‐time priority %" PRIu8, (int) rlen, comm, thread, prio);
 			goto loop;
 		}
 
@@ -595,13 +595,13 @@ int mpv_open_cplugin(struct mpv_handle *restrict mpv) {
 		}
 	}
 
-	int_least32_t prio_max = rtkit_realtime_max(&context);
+	int_least8_t prio_max = rtkit_realtime_max(&context);
 	if (unlikely(prio_max < 0)) {
 		mesg(&context, LOG_CRIT, "Failed to determine maximum real‐time priority");
 		goto destroy;
 	}
 
-	mesg(&context, LOG_INFO, "Maximum real‐time priority %" PRIiLEAST32, prio_max);
+	mesg(&context, LOG_INFO, "Maximum real‐time priority %" PRIiLEAST8, prio_max);
 
 	while (true) {
 		struct mpv_event *event = mpv_wait_event(mpv, 0.0);
