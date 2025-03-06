@@ -8,8 +8,9 @@
 
     eachSystem = lib.genAttrs [ "riscv64-linux" "aarch64-linux" "x86_64-linux" ];
   in {
-    packages = eachSystem (system: {
-      default = nixpkgs.legacyPackages.${system}.callPackage ({
+    packages = eachSystem (system: let pkgs = nixpkgs.legacyPackages.${system};
+    in {
+      default = pkgs.callPackage ({
         lib,
         stdenv,
         pkg-config,
@@ -47,6 +48,11 @@
           maintainers = with lib.maintainers; [ mvs ];
         };
       }) { };
+
+      mpv = pkgs.mpv-unwrapped.wrapper {
+        mpv = pkgs.mpv-unwrapped;
+        scripts = [ self.packages.${system}.default ];
+      };
     });
 
     devShells = eachSystem (system: {
