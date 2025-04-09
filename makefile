@@ -1,6 +1,6 @@
 DESTDIR ?=
 PREFIX ?= /usr
-libdir := $(PREFIX)/share/mpv/scripts
+libdir := $(DESTDIR)$(PREFIX)/share/mpv/scripts
 
 CFLAGS ?= -Wall -Wextra -Werror=format -D_FORTIFY_SOURCE=3 -O2 -flto
 CFLAGS += -std=c23 -D_XOPEN_SOURCE=700 -fPIC -fvisibility=hidden
