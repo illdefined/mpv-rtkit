@@ -1,8 +1,4 @@
 {
-  nixConfig = {
-    extra-experimental-features = "ca-derivations";
-  };
-
   outputs = { self, nixpkgs, ... }: let
     inherit (nixpkgs) lib;
 
@@ -21,10 +17,6 @@
 
       stdenv.mkDerivation {
         __structuredAttrs = true;
-
-        __contentAddressed = true;
-        outputHashMode = "recursive";
-        outputHashAlgo = "sha256";
 
         pname = "mpv-rtkit";
         version = "0";
