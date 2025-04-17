@@ -578,7 +578,7 @@ static bool thread_renice(struct Context const *restrict context, struct Thread 
 		mesg(context, LOG_WARN, "Unable to directly change nice level of task %.*s [%i] to %" PRI_NICE ": %m",
 		     (int) thread->len, thread->comm, thread->pid, target);
 
-	mesg(context, LOG_DEBUG, "Changing nice level of task %.*s [%i] to %" PRI_RTPRIO " via RtKit",
+	mesg(context, LOG_DEBUG, "Changing nice level of task %.*s [%i] to %" PRI_NICE " via RtKit",
 	     (int) thread->len, thread->comm, thread->pid, target);
 
 		if (!rtkit_renice(context, thread->pid, target)) {
