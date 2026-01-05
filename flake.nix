@@ -12,7 +12,6 @@
         pkg-config,
         mpv-unwrapped,
         dbus,
-        rtkit,
       }:
 
       stdenv.mkDerivation {
@@ -41,8 +40,7 @@
         };
       }) { };
 
-      mpv = pkgs.mpv-unwrapped.wrapper {
-        mpv = pkgs.mpv-unwrapped;
+      mpv = pkgs.mpv.override {
         scripts = [ self.packages.${system}.default ];
       };
     });
